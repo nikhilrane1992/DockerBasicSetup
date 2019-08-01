@@ -1,0 +1,75 @@
+version: '3'
+
+services:
+  postgres_database:
+    image: postgres
+    container_name: "postgres_database"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    # ports:
+    #   - "5432:5432"
+
+  mongo_database:
+    image: mongo:3.4.10
+    container_name: "mongo_database"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./DockerConfig/MongoConfig/:/docker-entrypoint-initdb.d/
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=optiex
+      - MONGO_INITDB_ROOT_PASSWORD=optiex123
+    ports:
+      - "27017:27017"
+    command: 
+       - /bin/bash
+       - -c
+       - |
+        echo "Starting mongo server ..."
+        docker-entrypoint.sh mongod
+
+  web:
+    build: .
+    working_dir: /home/python/app
+    volumes:
+    - "./DjangoServer:/home/python/app"
+    - "./PythonConfig/deploy_commands.sh:/deploy_commands.sh"
+    - "./PythonConfig/requirements.txt:/requirements.txt"
+    ports:
+      - "1992:1992"
+    depends_on:
+      - postgres_database
+    links:
+      - postgres_database
+    command: 
+       - /bin/bash
+       - -c
+       - |
+        pip install -r /requirements.txt 
+        echo "Starting django server ..."
+        /deploy_commands.sh
+
+  node_server:
+    image: "node:8.9.1"
+    working_dir: /home/node/app
+    container_name: node_server
+    volumes:
+    - "./NodeServer:/home/node/app"
+    command: 
+       - /bin/bash
+       - -c
+       - |
+        echo "Starting node server ..."
+        node app.js
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo_database
+    links:
+      - mongo_database
+
+volumes:
+  postgres_data:
+  mongo_data:
