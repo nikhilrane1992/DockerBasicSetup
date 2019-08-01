@@ -5,7 +5,7 @@ var bodyParser = require('body-parser')
 var mongoose = require('mongoose');
 var nodeRoutes = require('./core_services/routes/node.route');
 app.use(bodyParser.json({}));
-mongoose.connect('mongodb://optiex:optiex123@mongo_database:27017/NodeDatabase', { useNewUrlParser: true });
+mongoose.connect('mongodb://nikhil:nikhil123@mongo_database:27017/NodeDatabase', { useNewUrlParser: true });
 
 app.use('/', router);
 router.use('/node', nodeRoutes);

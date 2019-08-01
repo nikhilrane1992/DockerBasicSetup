@@ -19,8 +19,8 @@ services:
       - ./DockerConfig/MongoConfig/:/docker-entrypoint-initdb.d/
       - mongo_data:/data/db
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=optiex
-      - MONGO_INITDB_ROOT_PASSWORD=optiex123
+      - MONGO_INITDB_ROOT_USERNAME=nikhil
+      - MONGO_INITDB_ROOT_PASSWORD=nikhil123
     ports:
       - "27017:27017"
     command: 
@@ -35,8 +35,8 @@ services:
     working_dir: /home/python/app
     volumes:
     - "./DjangoServer:/home/python/app"
-    - "./PythonConfig/deploy_commands.sh:/deploy_commands.sh"
-    - "./PythonConfig/requirements.txt:/requirements.txt"
+    - "./DockerConfig/PythonConfig/deploy_commands.sh:/deploy_commands.sh"
+    - "./DockerConfig/PythonConfig/requirements.txt:/requirements.txt"
     ports:
       - "1992:1992"
     depends_on:
