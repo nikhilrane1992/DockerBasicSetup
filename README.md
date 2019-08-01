@@ -1,4 +1,4 @@
-# DockerBasicSetup
+# Docker Basic Setup
 Docker basic setup with Nodejs, PostgresDB, MongoDB, Python
 
 
